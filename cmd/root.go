@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net"
+	"time"
 
 	pb "github.com/open-cloud-initiative/specs/gen/go/tags/v1"
 	"github.com/open-cloud-initiative/tags/internal/adapters/db"
@@ -75,7 +76,11 @@ func runRoot(ctx context.Context, _ ...string) error {
 		return err
 	}
 
-	lis, err := net.Listen("tcp", cfg.Flags.Addr)
+	lc := net.ListenConfig{
+		KeepAlive: 5 * time.Minute,
+	}
+
+	lis, err := lc.Listen(ctx, "tcp", cfg.Flags.Addr)
 	if err != nil {
 		return err
 	}
