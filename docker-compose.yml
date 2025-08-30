@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:14
+    container_name: postgres
+    networks:
+      - oci
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=example
+      - POSTGRES_PASSWORD=example
+      - POSTGRES_DB=tags
+    volumes:
+      - pg:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+networks:
+  oci:
+
+volumes:
+  pg: {}

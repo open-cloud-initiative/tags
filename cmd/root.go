@@ -13,7 +13,6 @@ import (
 	"gorm.io/gorm/schema"
 
 	"github.com/katallaxie/pkg/dbx"
-	"github.com/katallaxie/pkg/server"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -30,26 +29,6 @@ var (
 	date    = "unknown"
 )
 
-var _ server.Listener = (*WebSrv)(nil)
-
-// WebSrv is the server that implements the Noop interface.
-type WebSrv struct {
-	cfg *config.Config
-}
-
-// NewWebSrv returns a new instance of NoopSrv.
-func NewWebSrv(cfg *config.Config) *WebSrv {
-	return &WebSrv{cfg}
-}
-
-// Start starts the server.
-func (s *WebSrv) Start(ctx context.Context, ready server.ReadyFunc, run server.RunFunc) func() error {
-	return func() error {
-		// Start the server
-		return nil
-	}
-}
-
 func Init() error {
 	ctx := context.Background()
 
@@ -57,11 +36,6 @@ func Init() error {
 	if err != nil {
 		return err
 	}
-
-	RootCmd.PersistentFlags().BoolVarP(&cfg.Flags.Verbose, "verbose", "v", cfg.Flags.Verbose, "verbose output")
-	RootCmd.PersistentFlags().BoolVarP(&cfg.Flags.Dry, "dry", "d", cfg.Flags.Dry, "dry run")
-	RootCmd.PersistentFlags().BoolVarP(&cfg.Flags.Root, "root", "r", cfg.Flags.Root, "run as root")
-	RootCmd.PersistentFlags().BoolVarP(&cfg.Flags.Force, "force", "f", cfg.Flags.Force, "force init")
 
 	RootCmd.SilenceErrors = true
 	RootCmd.SilenceUsage = true
@@ -84,10 +58,7 @@ var RootCmd = &cobra.Command{
 }
 
 func runRoot(ctx context.Context, _ ...string) error {
-	s, _ := server.WithContext(ctx)
-	s.SetLimit(3)
-
-	conn, err := gorm.Open(postgres.Open(""), &gorm.Config{
+	conn, err := gorm.Open(postgres.Open(cfg.Flags.DatabaseURI), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{},
 	})
 	if err != nil {
@@ -99,7 +70,12 @@ func runRoot(ctx context.Context, _ ...string) error {
 		return err
 	}
 
-	lis, err := net.Listen("tcp", ":4040")
+	err = store.Migrate(ctx)
+	if err != nil {
+		return err
+	}
+
+	lis, err := net.Listen("tcp", cfg.Flags.Addr)
 	if err != nil {
 		return err
 	}

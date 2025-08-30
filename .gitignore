@@ -22,6 +22,7 @@ tmp
 
 # Procfile
 Procfile.local
+.env
 
 ### Go Patch ###
 /vendor/

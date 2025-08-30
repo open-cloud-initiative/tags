@@ -6,6 +6,10 @@ GO_RELEASER 		?= goreleaser
 GO_TOOL 			?= $(GO) tool
 GO_TEST 			?= $(GO_TOOL) gotest.tools/gotestsum --format pkgname
 
+.PHONY: start
+start: ## Start the service.
+	$(GO_TOOL) github.com/air-verse/air
+
 .PHONY: build
 build: ## Build the binary file.
 	$(GO_RELEASER) build --snapshot --clean

@@ -2,23 +2,15 @@ package config
 
 import (
 	"os"
-	"sync"
 
-	"github.com/katallaxie/pkg/filex"
+	"github.com/kelseyhightower/envconfig"
 )
 
 // Flags contains the command line flags.
 type Flags struct {
-	// Dry toggles the dry run mode.
-	Dry bool
-	// Force toggles the force mode.
-	Force bool
-	// Root runs the command as root.
-	Root bool
-	// Verbose toggles the verbosity.
-	Verbose bool
-	// Version toggles the version.
-	Version bool
+	Addr        string `envconfig:"TAGS_ADDR" default:":4040"`
+	DatabaseURI string `envconfig:"TAGS_DATABASE_URI" default:""`
+	Environment string `envconfig:"TAGS_ENV" default:"production"`
 }
 
 // NewFlags returns a new flags.
@@ -28,10 +20,6 @@ func NewFlags() *Flags {
 
 // Config contains the configuration.
 type Config struct {
-	// Verbose toggles the verbosity
-	Verbose bool
-	// File...
-	File string
 	// Flags ...
 	Flags *Flags
 	// Stdin ...
@@ -40,8 +28,6 @@ type Config struct {
 	Stdout *os.File
 	// Stderr ...
 	Stderr *os.File
-
-	sync.RWMutex
 }
 
 // New returns a new config.
@@ -50,18 +36,16 @@ func New() *Config {
 		Stdin:  os.Stdin,
 		Stdout: os.Stdout,
 		Stderr: os.Stderr,
-		Flags:  &Flags{},
+		Flags:  NewFlags(),
 	}
 }
 
 // InitDefaultConfig initializes the default configuration.
 func (c *Config) InitDefaultConfig() error {
-	folder, err := filex.ExpandHomeFolder(c.File)
+	err := envconfig.Process("", c.Flags)
 	if err != nil {
 		return err
 	}
-
-	c.File = folder
 
 	return nil
 }
