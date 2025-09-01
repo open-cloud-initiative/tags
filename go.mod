@@ -17,7 +17,7 @@ require (
 	github.com/spf13/cobra v1.9.1
 	google.golang.org/grpc v1.73.0
 	gorm.io/driver/postgres v1.6.0
-	gorm.io/gorm v1.30.1
+	gorm.io/gorm v1.30.2
 )
 
 require (
