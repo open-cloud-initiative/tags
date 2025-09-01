@@ -38,6 +38,8 @@ func Init() error {
 		return err
 	}
 
+	RootCmd.AddCommand(Migrate)
+
 	RootCmd.SilenceErrors = true
 	RootCmd.SilenceUsage = true
 
@@ -67,11 +69,6 @@ func runRoot(ctx context.Context, _ ...string) error {
 	}
 
 	store, err := dbx.NewDatabase(conn, db.NewReadTx(), db.NewWriteTx())
-	if err != nil {
-		return err
-	}
-
-	err = store.Migrate(ctx)
 	if err != nil {
 		return err
 	}

@@ -11,6 +11,7 @@ tool (
 )
 
 require (
+	github.com/google/uuid v1.6.0
 	github.com/katallaxie/pkg v0.7.8
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/open-cloud-initiative/specs v0.0.0-20250829174427-652e44067657

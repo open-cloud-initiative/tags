@@ -1,5 +1,8 @@
 .DEFAULT_GOAL := build
 
+include .env
+export
+
 # Go variables
 GO 					?= go
 GO_RELEASER 		?= goreleaser
@@ -13,6 +16,10 @@ start: ## Start the service.
 .PHONY: build
 build: ## Build the binary file.
 	$(GO_RELEASER) build --snapshot --clean
+
+.PHONY: migrate
+migrate: ## Run database migrations.
+	$(GO) run main.go migrate
 
 .PHONY: generate
 generate: ## Generate code.
