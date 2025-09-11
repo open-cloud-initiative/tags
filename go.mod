@@ -16,7 +16,7 @@ require (
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/open-cloud-initiative/specs v0.0.0-20250829174427-652e44067657
 	github.com/spf13/cobra v1.10.1
-	google.golang.org/grpc v1.75.0
+	google.golang.org/grpc v1.75.1
 	gorm.io/driver/postgres v1.6.0
 	gorm.io/gorm v1.30.5
 )
