@@ -1,0 +1,10 @@
+apiVersion: v2
+appVersion: 0.1.0
+description: A helm chart for Tag Service
+name: tags
+keywords:
+  - oci
+version: 0.1.0
+sources:
+  - https://github.com/open-cloud-initiative/tags
+home: http://github.com/open-cloud-initiative/tags
