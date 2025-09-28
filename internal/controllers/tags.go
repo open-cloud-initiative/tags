@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"context"
+
 	"github.com/open-cloud-initiative/tags/internal/ports"
 
 	"github.com/katallaxie/pkg/dbx"
@@ -18,4 +20,9 @@ func NewTagsController(store dbx.Database[ports.ReadTx, ports.ReadWriteTx]) *Tag
 	return &TagsController{
 		store: store,
 	}
+}
+
+// ListTags lists all tags.
+func (c *TagsController) ListTags(ctx context.Context, req *pb.ListTagsRequest) (*pb.ListTagsResponse, error) {
+	return &pb.ListTagsResponse{}, nil
 }
