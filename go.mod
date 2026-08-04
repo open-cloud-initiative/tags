@@ -17,7 +17,7 @@ require (
 	github.com/open-cloud-initiative/specs v0.0.0-20250829174427-652e44067657
 	github.com/spf13/cobra v1.10.2
 	google.golang.org/grpc v1.83.0
-	gorm.io/driver/postgres v1.6.1
+	gorm.io/driver/postgres v1.6.2
 	gorm.io/gorm v1.31.2
 )
 
